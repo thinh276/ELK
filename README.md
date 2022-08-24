@@ -57,12 +57,40 @@ input {
 `bgnde`: start date of query (July 1st);
 `endde`: end date of query (July 30th);
 `numOfRows=1000`1000 is maximum rows for each query
-
+```python
+filter {
+  mutate {
+     remove_field => [ "[response][body][items][item][popfile]" ] #remove unnesscery field
+  }
+  date {
+     match => { "[response][body][items][item][happlenDt]", "yyyyMMdd" } #format as date
+  }
+}
+```
+**Somehow, filter does not work, I could not delete and format these fields but Logstash runs and transfers data to Kibana normaly**
+```python
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "realtime-subway"
+  }
+  stdout{
+    codec => rubydebug
+  }
+}
+```
 Run .conf file in Virtual Machine
 ```python
 sudo /usr/share/logstash/bin/logstash -f abandonment.conf
 ```
 
 ## Visualization with Kibana
-Visualization: (http://20.249.85.198:5601/app/dashboards#/)
+Dev Tools confirm
+```python
+get abadoment/_search
+```
+![Screenshot](https://user-images.githubusercontent.com/79763166/186496665-b442f9b2-6fbf-40d4-8582-c071ace20227.jpg)
 
+Kibana Dashboard http://20.249.85.198:5601/app/dashboards#/view/137d9280-23db-11ed-82db-a3cc495457dd?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15h,to:'2022-08-24T18:32:39.155Z'))
+
+***Here, because we can take maximum of 1000 rows and 4 pages of data, so it's not enough to show the difference in chart.***
