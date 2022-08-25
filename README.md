@@ -5,6 +5,10 @@ This repo is my ***ELK*** (Elasticsearch, Logstash, Kibana) practice: use ***ELK
 
 data.go.kr supports open API that can use for free after resgistration
 
+**Enviroment**:
+- Azure Virtual Machine: Linux (ubuntu 20.04)
+- Elasticsearch: version 7.17.5 http://20.249.85.198:9200/
+
 # Data
 [Data](https://www.data.go.kr/data/15098931/openapi.do): Ministry of Agriculture, Food and Rural Affairs, Agriculture, Forestry and Livestock Quarantine Headquarters - Animal Protection Management System Abandoned Animal Information - Korea (농림축산식품부 농림축산검역본부 - 동물보호관리시스템 유기동물 정보)
 
