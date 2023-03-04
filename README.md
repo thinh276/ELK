@@ -12,6 +12,53 @@ data.go.kr supports open API that can use for free after resgistration
 # Data
 [Data](https://www.data.go.kr/data/15098931/openapi.do): Ministry of Agriculture, Food and Rural Affairs, Agriculture, Forestry and Livestock Quarantine Headquarters - Animal Protection Management System Abandoned Animal Information - Korea (농림축산식품부 농림축산검역본부 - 동물보호관리시스템 유기동물 정보)
 
+ 1. Input and format data
+ 
+ For each query from open API, we can get 1 page of 1000 rows data in one time. Our code download one by one page and append data into our MySQL database `Abandoment`
+
+
+ ***Input***
+ 
+ We use `sqlalchemy` library in Python to connect with our AWS server.
+  
+ ```python
+db_connection_str = 'mysql+pymysql://admin:i4GSOM8GCjRfDyV@vteam6.cbr4uubmqr4e.ap-northeast-2.rds.amazonaws.com/Abandoment'
+db_connection = create_engine(db_connection_str)
+conn = db_connection.connect()
+ ```
+ 
+ ***Format***
+ 
+ In the step of input, we format data before input into MySQL database. Use the format as in the instruction file (data.go.kr)
+ ```python
+ dtypesql = {'desertionNo':sqlalchemy.types.VARCHAR(15),
+            'filename':sqlalchemy.types.VARCHAR(100), 
+            'happenDt':sqlalchemy.Date(), #VARCHAR(8)
+            'kindCd':sqlalchemy.types.VARCHAR(50),
+            'colorCd':sqlalchemy.types.VARCHAR(30), 
+            'age':sqlalchemy.types.VARCHAR(30), 
+            'weight':sqlalchemy.types.VARCHAR(30),
+            'noticeNo':sqlalchemy.types.VARCHAR(30),
+            'noticeSdt':sqlalchemy.types.Date(), #VARCHAR(8)
+            'noticeEdt':sqlalchemy.types.Date(), #VARCHAR(8)
+            'popfile':sqlalchemy.types.VARCHAR(100),
+            'processState':sqlalchemy.types.VARCHAR(10),
+            'sexCd':sqlalchemy.types.VARCHAR(1),
+            'neuterYn':sqlalchemy.types.VARCHAR(1),
+            'specialMark':sqlalchemy.types.VARCHAR(200),
+            'careNm':sqlalchemy.types.VARCHAR(50),
+            'careTel':sqlalchemy.types.VARCHAR(14),
+            'careAddr':sqlalchemy.types.VARCHAR(200),
+            'orgNm':sqlalchemy.types.VARCHAR(50),
+            'chargeNm':sqlalchemy.types.VARCHAR(20),
+            'officetel':sqlalchemy.types.VARCHAR(14),
+            'noticeComment':sqlalchemy.types.VARCHAR(200),
+}
+df.to_sql(name='aug', con=db_connection, if_exists='append', index=False,dtype=dtypesql)
+ ```
+*MySQL table:*
+
+<img width="1080" alt="Screenshot 2022-09-15 034841" src="https://user-images.githubusercontent.com/79763166/190238822-fbd36e3e-4209-46da-a333-f95f0946847b.png" style="width:800px;"/>
 
 > This data supplies the information on abandoned animals of the animal protection management system, and provides city and county inquiry API, city and county inquiry API, shelter inquiry API, and breed inquiry API.
 
